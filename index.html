@@ -9,13 +9,31 @@
   </head>
 
   <body>
-    <div id="root">
+    <div id="root" >
+  <form>
+    <div class="input-container">
+      <input type="text" placeholder="Search for an episode!" class="search" />
+      <p class="total-episodes"></p>
+      <select class="pisodes-select">
+        <option value="all-episodes" class="all-epidodes">All Episodes </option>
+      </select>
+      <select class="show-select">
+        <option value="all-shows" class="all-shows">All Shows</option>
+      </select>
     </div>
+    </form>
+
+  <div class="container">
+    
+  <div>
+  </div>
+
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
 
     <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
+    <script src="shows.js"></script>
   </body>
 </html>

@@ -937,7 +937,7 @@ function getAllShows() {
     {
       "id": 82,
       "url": "http://www.tvmaze.com/shows/82/game-of-thrones",
-      "name": "Game of Thrones",
+      "name": "of ThGame rones",
       "type": "Scripted",
       "language": "English",
       "genres": [

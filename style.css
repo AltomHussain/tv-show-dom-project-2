@@ -1,3 +1,131 @@
-#root {
-  color: red;
+#root{
+  background-color:#dfe6e9;
+}
+/*Epesode card styling */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.content {
+  /* background-color: #a3c434; */
+  background-color: #fff;
+  box-shadow: 5px 10px #888888;
+  color: black;
+  max-width: 270px;
+  padding: 7px;
+  border-radius: 5px;
+  margin: 8px 4px;
+}
+.image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 96%;
+  height: auto;
+}
+.image:hover {
+  width: 98%;
+  cursor: pointer;
+  transition: all 0.5s;
+  border: green solid 3px;
+  border-radius: 4px;
+}
+
+.content-header {
+  border: 2px black solid;
+  padding-left: 1px;
+  border-radius: 5px;
+  margin-bottom: 3px;
+}
+h3 {
+  text-align: center;
+}
+
+.paragraph {
+  font-size: 17px;
+}
+.span {
+  text-align: center;
+  background-color: rgb(104, 222, 183);
+  float: right;
+  margin-bottom: 4px;
+  color: black;
+  border-radius: 4px;
+  padding: 2px;
+}
+.read-more{
+  color: blue;
+}
+.read-more:hover {
+  cursor: pointer;
+  font-size: 18px;
+  text-decoration-line: underline;
+  color: blue;
+}
+.read-less{
+  color: green;
+}
+.read-less:hover {
+  cursor: pointer;
+  font-size: 18px;
+  text-decoration-line: underline;
+  color: blue;
+}
+
+/* Input continer & the input */
+.input-container {
+  margin: 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.search {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 10px;
+  box-sizing: border-box;
+}
+
+@media only screen and (max-width: 600px) {
+.input-container {
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.search {
+  width: 70%;
+  padding: 12px 20px;
+  margin: 8px 20px;
+  box-sizing: border-box;
+}
+
+}
+
+/* Style the show list and episodes dropdown */
+.show-select{
+  margin: 5px;
+  background-color: DodgerBlue;
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+.show-select option{
+  background-color: rgb(240, 111, 111);
+  cursor: pointer;
+}
+.episodes-select{
+  margin: 5px;
+  background-color: DodgerBlue;
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+.episodes-select option{
+    background-color: rgb(245, 127, 31);
+  cursor: pointer;
 }
