@@ -5,6 +5,7 @@ let inputContainer = document.querySelector(".input-container");
 let selectElement = document.querySelector(".pisodes-select");
 let ShowSelect = document.querySelector(".show-select");
 let TotalEpisodeNo = document.querySelector(".total-episodes");
+let TotalShows = document.querySelector(".total-show");
 let backToShow = document.getElementById("back-to-show");
 let episodeSearch = document.getElementById("episode-search");
 let showSearch = document.getElementById("show-search");
@@ -16,6 +17,7 @@ function setup() {
   GobackToDisplayShows(ALLSHOWS);
   selectShow(ALLSHOWS);
   EpisodeSelectResult();
+  ShowSearchInput();
 }
 
 /**Display shows  */
@@ -30,7 +32,11 @@ function CreateShowCart(listOfShows) {
     //show search search
     showSearch.style.display = "block";
     //Hide episode select dropdown when create shows
-    selectElement.style.display = "none"
+    selectElement.style.display = "none";
+    //Show total
+    TotalShows.style.display = "block";
+    //Hide Total numbr of episodes
+    TotalEpisodeNo.style.display = "none";
 
     ///Inside loop
     let ShowHeader = document.createElement("h3");
@@ -83,6 +89,7 @@ function CreateShowCart(listOfShows) {
     showContent.appendChild(MiddleCountainer);
     container.appendChild(showContent);
   });
+  TotalShows.innerText = `Found ${0} Of ${listOfShows.length}`;
   let showContents = [...document.querySelectorAll(".image-show")];
   selectShowToDisplayEpisodes(showContents);
 }
@@ -98,14 +105,16 @@ function selectShowToDisplayEpisodes(listOfShowsContents) {
       //Hide show Search when show is clicked
       showSearch.style.display = "none";
       ///Show episode select dropdown
-        selectElement.style.display = "block";
-
+      selectElement.style.display = "block";
+      //Show total
+      TotalShows.style.display = "none";
+      //Show the total number of episodes
+      TotalEpisodeNo.style.display = "block";
 
       fetch(`https://api.tvmaze.com/shows/${Number(showId)}/episodes`)
         .then((res) => res.json())
         .then((data) => {
           const ALLEPISODES = data;
-          console.log("in fetch", ALLEPISODES);
           makePageForEpisodes(ALLEPISODES);
         })
         .catch((error) => console.error("Something went wrong:", error));
@@ -138,14 +147,16 @@ function selectShow(ALLSHOWS) {
     //Hide show Search when show is clicked
     showSearch.style.display = "none";
     //Show Episode secelt dropdown when going to episodes page
-      selectElement.style.display = "block";
+    selectElement.style.display = "block";
+    //Hide total
+    TotalShows.style.display = "none";
+    TotalEpisodeNo.style.display = "block";
 
     fetch(`https://api.tvmaze.com/shows/${Number(event.target.value)}/episodes`)
       .then((res) => res.json())
       .then((data) => {
         const ALLEPISODES = data;
         makePageForEpisodes(ALLEPISODES);
-        
       })
       .catch((error) =>
         console.error(
@@ -214,7 +225,7 @@ function CreateEpisodeCard(ALLEPISODES) {
 
   ROOTELEM.appendChild(container);
 }
-
+/** Read More*/
 function ReadMore(readMore, readLess, paragraph, summary, EpisodeNo) {
   readMore.addEventListener("click", () => {
     readMore.style.display = "none";
@@ -229,7 +240,9 @@ function ReadMore(readMore, readLess, paragraph, summary, EpisodeNo) {
     });
     paragraph.innerHTML = `${summary}`;
   });
-}
+} /** Read More*/
+
+/** Read Less*/
 function ReadLess(readMore, readLess, paragraph, trimText, EpisodeNo) {
   readLess.addEventListener("click", () => {
     readLess.style.display = "none";
@@ -243,12 +256,12 @@ function ReadLess(readMore, readLess, paragraph, trimText, EpisodeNo) {
       elem.style.color = "";
     });
   });
-}
+} /** Read Less*/
 
 function numberOfSearchedEpisodes(ALLEPISODES) {
   TotalEpisodeNo.innerText = `${0} / ${ALLEPISODES.length}`;
 }
-
+/**Episode input search  */
 function SearchInputResult(ALLEPISODES) {
   let getListOfContents = [...document.querySelectorAll(".content")];
   let searchBar = document.querySelector(".search");
@@ -271,7 +284,7 @@ function SearchInputResult(ALLEPISODES) {
       searchTerm == "" ? 0 : filteredEpisodes.length
     } / ${ALLEPISODES.length}`;
   });
-}
+} /**Episode input search  */
 
 //Select episode creation
 function EpisodeSelectResult() {
@@ -319,6 +332,27 @@ function GobackToDisplayShows(ListOfAllShows) {
   });
 }
 
+/**Search Show input */
+function ShowSearchInput() {
+  let ShowInput = document.getElementById("show-search");
+  let ListOfShows = [...document.querySelectorAll(".show-content")];
+  ShowInput.addEventListener("keyup", (event) => {
+    let searchValue = event.target.value.toLowerCase();
+    ListOfShows.forEach((show) => {
+      let IncludesResult = show.innerText.toLowerCase().includes(searchValue);
+      if (IncludesResult) {
+        show.style.display = "block";
+      } else {
+        show.style.display = "none";
+      }
+    });
+    let filterShows = ListOfShows.filter(
+      (show) => show.style.display == "block"
+    );
+    TotalShows.innerText = `Found ${filterShows.length} Of ${ListOfShows.length}`;
+  });
+}
+
 window.onload = setup;
 
 /**
@@ -336,3 +370,5 @@ Add show search and toggle between the search episode input */
 
 //Tomorrow
 //Work in the serch input for shows
+
+//Nicd colors => #04AA6D & #D9EEE1

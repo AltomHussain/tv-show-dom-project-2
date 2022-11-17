@@ -8,8 +8,8 @@
   justify-content: space-around;
 }
 .content {
-  /* background-color: #a3c434; */
-  background-color: #fff;
+  background-color: #a3c434;
+  /* background-color: #fff; */
   box-shadow: 5px 10px #888888;
   color: black;
   max-width: 270px;
