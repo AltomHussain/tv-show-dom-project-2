@@ -12,14 +12,22 @@
     <div id="root" >
   <form>
     <div class="input-container">
-      <input type="text" placeholder="Search for an episode!" class="search" />
+      <input type="text" placeholder="Search for an episode!" class="search" id="episode-search"/>
+            <input type="text" placeholder="Search For A Show!" class="search" id="show-search" />
       <p class="total-episodes"></p>
-      <select class="pisodes-select">
-        <option value="all-episodes" class="all-epidodes">All Episodes </option>
+      <select class="pisodes-select" id="episode-select">
+        <option value="all-episodes" class="all-epidodes" >All Episodes </option>
       </select>
-      <select class="show-select">
+
+      <select class="show-select" id="show-select">
+        <option value="all-shows" class="all-shows">All Shows </option>
+      </select>
+
+      <!-- <select class="show-select">
         <option value="all-shows" class="all-shows">All Shows</option>
-      </select>
+      </select> -->
+
+      <p id="back-to-show">Back To Shows</p>
     </div>
     </form>
 

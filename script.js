@@ -5,28 +5,121 @@ let inputContainer = document.querySelector(".input-container");
 let selectElement = document.querySelector(".pisodes-select");
 let ShowSelect = document.querySelector(".show-select");
 let TotalEpisodeNo = document.querySelector(".total-episodes");
-
+let backToShow = document.getElementById("back-to-show");
+let episodeSearch = document.getElementById("episode-search");
+let showSearch = document.getElementById("show-search");
+let EpisodeSelect = document.getElementById("episode-select");
+// let showSelect = document.getElementById("show-select");
 function setup() {
-  // const ALLEPISODES = getAllEpisodes();
-
-  fetch("https://api.tvmaze.com/shows/82/episodes")
-    .then((res) => res.json())
-    .then((data) => {
-      const ALLEPISODES = data;
-      makePageForEpisodes(ALLEPISODES);
-    })
-    .catch((error) => console.error("Something went wrong:", error));
-
   const ALLSHOWS = getAllShows();
+  CreateShowCart(ALLSHOWS);
+  GobackToDisplayShows(ALLSHOWS);
   selectShow(ALLSHOWS);
+  EpisodeSelectResult();
+}
+
+/**Display shows  */
+function CreateShowCart(listOfShows) {
+  container.innerHTML = "";
+  listOfShows.forEach((showObj) => {
+    let showContent = document.createElement("div");
+    //Hide go back button
+    backToShow.style.display = "none";
+    //Hide episode serch
+    episodeSearch.style.display = "none";
+    //show search search
+    showSearch.style.display = "block";
+    //Hide episode select dropdown when create shows
+    selectElement.style.display = "none"
+
+    ///Inside loop
+    let ShowHeader = document.createElement("h3");
+    let castingContainer = document.createElement("div");
+    let MiddleCountainer = document.createElement("div");
+    MiddleCountainer.className = "image-sum-gen-container";
+    showContent.className = "show-content";
+
+    let rated = document.createElement("p");
+    let genres = document.createElement("p");
+    let status = document.createElement("p");
+    let runtime = document.createElement("p");
+    let summary = document.createElement("p");
+
+    let image = document.createElement("img");
+    summary.className = "summary";
+    image.className = "image-show";
+    image.id = `${showObj.id}`;
+    castingContainer.className = "casting-container";
+    rated.className = "rated";
+    genres.className = "genres";
+    status.className = "status";
+    runtime.className = "runtime";
+    ShowHeader.className = "show-header";
+
+    ShowHeader.innerText = showObj.name;
+    rated.innerText = `Rated : ${showObj.rating.average}`;
+    genres.innerText = `Genres : ${showObj.genres
+      .toString()
+      .replace(/,/g, " || ")}`;
+    status.innerText = `Status : ${showObj.status}`;
+    runtime.innerText = `Runtime : ${showObj.runtime}`;
+
+    summary.innerHTML = showObj.summary;
+    image.src =
+      showObj.image == null
+        ? "https://wanderlustwithlisa.com/wp-content/uploads/2022/01/Friends-TV-Show-1024x577.png"
+        : showObj.image.medium;
+
+    showContent.appendChild(ShowHeader);
+    castingContainer.appendChild(rated);
+    castingContainer.appendChild(genres);
+    castingContainer.appendChild(status);
+    castingContainer.appendChild(runtime);
+    MiddleCountainer.appendChild(castingContainer);
+
+    MiddleCountainer.appendChild(summary);
+    MiddleCountainer.appendChild(image);
+
+    showContent.appendChild(MiddleCountainer);
+    container.appendChild(showContent);
+  });
+  let showContents = [...document.querySelectorAll(".image-show")];
+  selectShowToDisplayEpisodes(showContents);
+}
+
+function selectShowToDisplayEpisodes(listOfShowsContents) {
+  listOfShowsContents.forEach((show) => {
+    show.addEventListener("click", (e) => {
+      const showId = e.target.id;
+      //Show go back button
+      backToShow.style.display = "block";
+      //Show episode search
+      episodeSearch.style.display = "block";
+      //Hide show Search when show is clicked
+      showSearch.style.display = "none";
+      ///Show episode select dropdown
+        selectElement.style.display = "block";
+
+
+      fetch(`https://api.tvmaze.com/shows/${Number(showId)}/episodes`)
+        .then((res) => res.json())
+        .then((data) => {
+          const ALLEPISODES = data;
+          console.log("in fetch", ALLEPISODES);
+          makePageForEpisodes(ALLEPISODES);
+        })
+        .catch((error) => console.error("Something went wrong:", error));
+    });
+  });
 }
 
 function makePageForEpisodes(ALLEPISODES) {
   CreateEpisodeCard(ALLEPISODES);
   numberOfSearchedEpisodes(ALLEPISODES);
   SearchInputResult(ALLEPISODES);
-  SelectResult();
+  EpisodeSelectResult();
 }
+
 //Show select creation
 function selectShow(ALLSHOWS) {
   ALLSHOWS.forEach((show) => {
@@ -36,15 +129,23 @@ function selectShow(ALLSHOWS) {
     ShowSelect.appendChild(option);
   });
 
-  //Search Result for Shows
+  //Select Result for Shows
   ShowSelect.addEventListener("change", (event) => {
-    console.log(typeof Number(event.target.value));
+    //show go back
+    backToShow.style.display = "block";
+    //Show episode search
+    episodeSearch.style.display = "block";
+    //Hide show Search when show is clicked
+    showSearch.style.display = "none";
+    //Show Episode secelt dropdown when going to episodes page
+      selectElement.style.display = "block";
 
     fetch(`https://api.tvmaze.com/shows/${Number(event.target.value)}/episodes`)
       .then((res) => res.json())
       .then((data) => {
         const ALLEPISODES = data;
         makePageForEpisodes(ALLEPISODES);
+        
       })
       .catch((error) =>
         console.error(
@@ -173,15 +274,14 @@ function SearchInputResult(ALLEPISODES) {
 }
 
 //Select episode creation
-function SelectResult() {
+function EpisodeSelectResult() {
   /**Clear the drop down every time you seclect a show and then dow the new episodes of that show*/
   selectElement.innerText = "";
   let getListofHeaderContents = [
     ...document.querySelectorAll(".content-header"),
   ];
   let getListOfContent = [...document.querySelectorAll(".content")];
-    let getSelectAllEpisodes = document.createElement("option");
-    console.log(getSelectAllEpisodes);
+  let getSelectAllEpisodes = document.createElement("option");
   getSelectAllEpisodes.innerText = "All Epidodes";
   getSelectAllEpisodes.value = "select all";
   selectElement.appendChild(getSelectAllEpisodes);
@@ -211,9 +311,14 @@ function SelectResult() {
       } / ${getListofHeaderContents.length}`;
     });
   });
-
-
 }
+//Go back function
+function GobackToDisplayShows(ListOfAllShows) {
+  backToShow.addEventListener("click", (e) => {
+    CreateShowCart(ListOfAllShows);
+  });
+}
+
 window.onload = setup;
 
 /**
@@ -225,3 +330,9 @@ https://jsonplaceholder.typicode.com/users
 1. In the drop down select, display oly the searched episodes
 2.Create an extra card and show it when there is no search result from the input 
  */
+
+/**
+Add show search and toggle between the search episode input */
+
+//Tomorrow
+//Work in the serch input for shows
